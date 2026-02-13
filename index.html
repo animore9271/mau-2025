@@ -6,11 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: linear-gradient(180deg, #fff5f7, #fdecef);
@@ -22,12 +18,9 @@
     .container {
       height: 100vh;
       overflow-y: scroll;
-      scroll-behavior: auto;
     }
 
-    .container::-webkit-scrollbar {
-      display: none;
-    }
+    .container::-webkit-scrollbar { display: none; }
 
     section {
       height: 100vh;
@@ -39,83 +32,36 @@
       text-align: center;
     }
 
-    /* Landing */
-    .title {
-      font-size: clamp(30px, 5vw, 48px);
-      font-weight: 500;
-    }
+    .title { font-size: clamp(30px, 5vw, 48px); }
+    .subtitle { margin-top: 14px; font-size: 14px; opacity: 0.6; }
 
-    .subtitle {
-      margin-top: 14px;
-      font-size: 14px;
-      color: rgba(74, 44, 42, 0.6);
-      letter-spacing: 1px;
-    }
-
-    /* Photo cards */
-    .photo {
-      padding: 32px;
-    }
-
+    .photo { padding: 32px; }
     .photo img {
       max-width: 100%;
       max-height: 70vh;
-      background: #ffffff;
+      background: #fff;
       padding: 12px;
       border-radius: 14px;
-      box-shadow:
-        0 8px 20px rgba(0,0,0,0.12),
-        0 2px 6px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       object-fit: contain;
     }
 
-    /* Ending */
-    .ending h1 {
-      font-size: clamp(26px, 5vw, 42px);
-      font-weight: 500;
-    }
+    .ending h1 { font-size: clamp(26px, 5vw, 42px); }
+    .ending h2 { margin-top: 16px; font-size: clamp(22px, 4vw, 36px); color: #e07a8c; }
 
-    .ending h2 {
-      margin-top: 16px;
-      font-size: clamp(22px, 4vw, 36px);
-      color: #e07a8c;
-    }
-
-    .buttons {
-      margin-top: 28px;
-      display: flex;
-      gap: 20px;
-    }
-
+    .buttons { margin-top: 28px; display: flex; gap: 20px; }
     button {
       padding: 12px 26px;
       font-size: 16px;
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease;
     }
 
-    button:hover {
-      transform: scale(1.05);
-    }
+    .yes { background: #e07a8c; color: white; }
+    .no { background: #f2d6dc; color: #4a2c2a; }
 
-    .yes {
-      background: #e07a8c;
-      color: white;
-      box-shadow: 0 8px 20px rgba(224,122,140,0.4);
-    }
-
-    .no {
-      background: #f2d6dc;
-      color: #4a2c2a;
-    }
-
-    .response {
-      margin-top: 24px;
-      font-size: 18px;
-      min-height: 32px;
-    }
+    .response { margin-top: 24px; font-size: 18px; min-height: 32px; }
 
     .tap {
       position: fixed;
@@ -123,150 +69,118 @@
       width: 100%;
       text-align: center;
       font-size: 12px;
-      letter-spacing: 1px;
-      color: rgba(74, 44, 42, 0.6);
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <!-- Music (NO LOOP) -->
-  <audio id="bgm" src="music.mp3"></audio>
+<audio id="bgm" src="music.mp3"></audio>
 
-  <div class="container" id="scrollContainer">
+<div class="container" id="scrollContainer">
 
-    <!-- Landing -->
-    <section>
-      <div class="title">How did my 2025 look like?</div>
-      <div class="subtitle">tap to begin 🤍</div>
-    </section>
+  <section>
+    <div class="title">How did my 2025 look like?</div>
+    <div class="subtitle">tap to begin 🤍</div>
+  </section>
 
-    <!-- Photos -->
-    <section class="photo"><img src="images/01.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/02.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/03.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/04.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/05.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/06.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/07.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/08.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/09.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/10.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/11.webp" loading="lazy" decoding="async"></section>
-    <section class="photo"><img src="images/12.webp" loading="lazy" decoding="async"></section>
+  <!-- Photos -->
+  <section class="photo"><img src="images/01.webp"></section>
+  <section class="photo"><img src="images/02.webp"></section>
+  <section class="photo"><img src="images/03.webp"></section>
+  <section class="photo"><img src="images/04.webp"></section>
+  <section class="photo"><img src="images/05.webp"></section>
+  <section class="photo"><img src="images/06.webp"></section>
+  <section class="photo"><img src="images/07.webp"></section>
+  <section class="photo"><img src="images/08.webp"></section>
+  <section class="photo"><img src="images/09.webp"></section>
+  <section class="photo"><img src="images/10.webp"></section>
+  <section class="photo"><img src="images/11.webp"></section>
+  <section class="photo"><img src="images/12.webp"></section>
 
-    <!-- Valentine -->
-    <section class="ending" id="valentineSection">
-      <h1>Waiting for many more years like this</h1>
-      <h2 id="question">Will you be my Valentine? ❤️</h2>
+  <section class="ending" id="valentineSection">
+    <h1>Waiting for many more years like this</h1>
+    <h2 id="question">Will you be my Valentine? ❤️</h2>
 
-      <div class="buttons">
-        <button class="yes" onclick="sayYes()">Yes 💖</button>
-        <button class="no" onclick="sayNo()">No 🙃</button>
-      </div>
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💖</button>
+      <button class="no" onclick="sayNo()">No 🙃</button>
+    </div>
 
-      <div class="response" id="response"></div>
-    </section>
+    <div class="response" id="response"></div>
+  </section>
 
-  </div>
+</div>
 
-  <div class="tap">tap anywhere • sound on 🎧</div>
+<div class="tap">tap anywhere • sound on 🎧</div>
 
-  <!-- Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <script>
-    const container = document.getElementById("scrollContainer");
-    const music = document.getElementById("bgm");
-    const valentineSection = document.getElementById("valentineSection");
+<script>
+  const container = document.getElementById("scrollContainer");
+  const music = document.getElementById("bgm");
+  const valentine = document.getElementById("valentineSection");
 
-    let started = false;
-    let noCount = 0;
+  let started = false;
+  let rafId = null;
 
-    const noResponses = [
-      "😢 Wrong choice. Try again.",
-      "🙃 Hmm… think carefully.",
-      "😌 Are you sure about that?"
-    ];
+  function startExperience() {
+    if (started) return;
+    started = true;
 
-    function startExperience() {
-      if (started) return;
-      started = true;
+    music.play();
 
-      music.volume = 0.9;
-      music.play();
+    function syncScroll() {
+      if (!music.duration) {
+        rafId = requestAnimationFrame(syncScroll);
+        return;
+      }
 
-      music.addEventListener("loadedmetadata", () => {
-        const durationMs = music.duration * 1000;
+      const progress = music.currentTime / music.duration;
 
-        const startScroll = container.scrollTop;
-        const endScroll =
-          valentineSection.offsetTop - window.innerHeight * 0.1;
+      const endScroll =
+        valentine.offsetTop - window.innerHeight * 0.1;
 
-        const distance = endScroll - startScroll;
-        const startTime = performance.now();
+      container.scrollTop = endScroll * progress;
 
-        function animateScroll(now) {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / durationMs, 1);
-
-          // ease-in-out
-          const eased =
-            progress < 0.5
-              ? 2 * progress * progress
-              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-          container.scrollTop = startScroll + distance * eased;
-
-          if (progress < 1) {
-            requestAnimationFrame(animateScroll);
-          }
-        }
-
-        requestAnimationFrame(animateScroll);
-      });
+      if (!music.paused && !music.ended) {
+        rafId = requestAnimationFrame(syncScroll);
+      }
     }
 
-    document.body.addEventListener("click", startExperience, { once: true });
+    rafId = requestAnimationFrame(syncScroll);
+  }
 
-    function sayNo() {
-      const response = document.getElementById("response");
-      response.textContent = noResponses[noCount % noResponses.length];
-      noCount++;
-    }
+  document.body.addEventListener("click", startExperience, { once: true });
 
-    function sayYes() {
-      document.getElementById("question").textContent =
-        "Yay! You just made me very happy 💕";
-      document.getElementById("response").textContent =
-        "Here’s to us 🥂";
+  const noResponses = [
+    "😢 Wrong choice. Try again.",
+    "🙃 Hmm… think carefully.",
+    "😌 Are you sure about that?"
+  ];
+  let noCount = 0;
 
-      document.querySelector(".buttons").style.display = "none";
+  function sayNo() {
+    document.getElementById("response").textContent =
+      noResponses[noCount % noResponses.length];
+    noCount++;
+  }
 
-      launchConfetti();
-    }
+  function sayYes() {
+    document.getElementById("question").textContent =
+      "Yay! You just made me very happy 💕";
+    document.getElementById("response").textContent =
+      "Here’s to us 🥂";
+    document.querySelector(".buttons").style.display = "none";
 
-    function launchConfetti() {
-      const duration = 2500;
-      const end = Date.now() + duration;
-
-      const interval = setInterval(() => {
-        const timeLeft = end - Date.now();
-        if (timeLeft <= 0) return clearInterval(interval);
-
-        confetti({
-          particleCount: 40,
-          spread: 360,
-          startVelocity: 45,
-          ticks: 90,
-          origin: {
-            x: Math.random(),
-            y: Math.random() * 0.5
-          }
-        });
-      }, 250);
-    }
-  </script>
+    confetti({
+      particleCount: 200,
+      spread: 360,
+      startVelocity: 45,
+      origin: { y: 0.6 }
+    });
+  }
+</script>
 
 </body>
 </html>
