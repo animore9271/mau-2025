@@ -35,7 +35,6 @@
     .title { font-size: clamp(30px, 5vw, 48px); }
     .subtitle { margin-top: 14px; font-size: 14px; opacity: 0.6; }
 
-    .photo { padding: 32px; }
     .photo img {
       max-width: 100%;
       max-height: 70vh;
@@ -79,26 +78,26 @@
 
 <div class="container" id="scrollContainer">
 
-  <section>
+  <section class="step">
     <div class="title">How did my 2025 look like?</div>
     <div class="subtitle">tap to begin 🤍</div>
   </section>
 
   <!-- Photos -->
-  <section class="photo"><img src="images/01.webp"></section>
-  <section class="photo"><img src="images/02.webp"></section>
-  <section class="photo"><img src="images/03.webp"></section>
-  <section class="photo"><img src="images/04.webp"></section>
-  <section class="photo"><img src="images/05.webp"></section>
-  <section class="photo"><img src="images/06.webp"></section>
-  <section class="photo"><img src="images/07.webp"></section>
-  <section class="photo"><img src="images/08.webp"></section>
-  <section class="photo"><img src="images/09.webp"></section>
-  <section class="photo"><img src="images/10.webp"></section>
-  <section class="photo"><img src="images/11.webp"></section>
-  <section class="photo"><img src="images/12.webp"></section>
+  <section class="step photo"><img src="images/01.webp"></section>
+  <section class="step photo"><img src="images/02.webp"></section>
+  <section class="step photo"><img src="images/03.webp"></section>
+  <section class="step photo"><img src="images/04.webp"></section>
+  <section class="step photo"><img src="images/05.webp"></section>
+  <section class="step photo"><img src="images/06.webp"></section>
+  <section class="step photo"><img src="images/07.webp"></section>
+  <section class="step photo"><img src="images/08.webp"></section>
+  <section class="step photo"><img src="images/09.webp"></section>
+  <section class="step photo"><img src="images/10.webp"></section>
+  <section class="step photo"><img src="images/11.webp"></section>
+  <section class="step photo"><img src="images/12.webp"></section>
 
-  <section class="ending" id="valentineSection">
+  <section class="step ending" id="valentineSection">
     <h1>Waiting for many more years like this</h1>
     <h2 id="question">Will you be my Valentine? ❤️</h2>
 
@@ -119,40 +118,41 @@
 <script>
   const container = document.getElementById("scrollContainer");
   const music = document.getElementById("bgm");
-  const valentine = document.getElementById("valentineSection");
+  const steps = Array.from(document.querySelectorAll(".step"));
 
   let started = false;
-  let rafId = null;
+  let currentStep = 0;
 
-  function startExperience() {
+  const HOLD_TIME = 1000; // 1 second per photo
+
+  function scrollToStep(index) {
+    container.scrollTo({
+      top: steps[index].offsetTop,
+      behavior: "smooth"
+    });
+  }
+
+  async function playSequence() {
+    for (let i = 0; i < steps.length; i++) {
+      currentStep = i;
+      scrollToStep(i);
+
+      // Hold on photos, not landing
+      if (steps[i].classList.contains("photo")) {
+        await new Promise(r => setTimeout(r, HOLD_TIME));
+      }
+    }
+  }
+
+  document.body.addEventListener("click", async () => {
     if (started) return;
     started = true;
 
-    music.play();
+    await music.play();
+    playSequence();
+  }, { once: true });
 
-    function syncScroll() {
-      if (!music.duration) {
-        rafId = requestAnimationFrame(syncScroll);
-        return;
-      }
-
-      const progress = music.currentTime / music.duration;
-
-      const endScroll =
-        valentine.offsetTop - window.innerHeight * 0.1;
-
-      container.scrollTop = endScroll * progress;
-
-      if (!music.paused && !music.ended) {
-        rafId = requestAnimationFrame(syncScroll);
-      }
-    }
-
-    rafId = requestAnimationFrame(syncScroll);
-  }
-
-  document.body.addEventListener("click", startExperience, { once: true });
-
+  // Valentine logic
   const noResponses = [
     "😢 Wrong choice. Try again.",
     "🙃 Hmm… think carefully.",
@@ -174,7 +174,7 @@
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
-      particleCount: 200,
+      particleCount: 220,
       spread: 360,
       startVelocity: 45,
       origin: { y: 0.6 }
