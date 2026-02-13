@@ -128,7 +128,8 @@
   <section class="step photo"><img src="images/12.webp"></section>
 
   <!-- Valentine -->
-  <section class="step ending">
+  
+  <section class="step ending" id="finalSection">
     <h1>Waiting for many more years like this</h1>
     <h2 id="question">Will you be my Valentine? ❤️</h2>
 
@@ -220,6 +221,16 @@
     requestAnimationFrame(loop);
   }
 
+  const finalSection = document.getElementById("finalSection");
+
+  // When audio finishes, jump to final page
+  music.addEventListener("ended", () => {
+    container.scrollTo({
+      top: finalSection.offsetTop,
+      behavior: "auto"
+    });
+  });
+
   /* Valentine logic */
   const noResponses = [
     "🙃 Hmm… think carefully.",
@@ -254,3 +265,4 @@
 
 </body>
 </html>
+
