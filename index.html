@@ -237,8 +237,11 @@
     "🥺 Are you sure about that?",
     "😉 I feel like there’s a better answer.",
     "😜 Nice prank. Try again?",
-    "🤍 I’m right here."
-  ];
+    "💗 I’ll give you another chance.",
+    "😌 Take your time.",
+    "✨ Plot twist: that wasn’t it.",
+    "🫠 Let’s pretend that didn’t happen.",
+  ]; 
   let noCount = 0;
 
   function sayNo() {
@@ -249,9 +252,9 @@
 
   function sayYes() {
     document.getElementById("question").textContent =
-      "Okay wow… you just unlocked my biggest smile 😄💗";
+      "Well well well… look who said YES 😄";
     document.getElementById("response").textContent =
-      "Best answer of the year 🥂";
+      "Achievement unlocked: Valentine 💖";
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
@@ -265,4 +268,5 @@
 
 </body>
 </html>
+
 
