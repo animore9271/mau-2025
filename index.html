@@ -99,21 +99,6 @@
       font-size: 12px;
       opacity: 0.6;
     }
-
-    /* DEBUG OVERLAY */
-    .debug {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      z-index: 9999;
-      line-height: 1.4;
-    }
   </style>
 </head>
 <body>
@@ -159,13 +144,10 @@
 
 <div class="tap">tap anywhere • sound on 🎧</div>
 
-<!-- DEBUG -->
-<div class="debug" id="debugBox">waiting…</div>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-  /* Fix viewport height */
+  /* Mobile-safe viewport height */
   function setViewportHeight() {
     document.documentElement.style.setProperty(
       "--vh",
@@ -179,13 +161,7 @@
   const music = document.getElementById("bgm");
   const steps = Array.from(document.querySelectorAll(".step"));
 
-  /* MONTH DATA */
-  const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
-
-  // 🔑 ADJUST THESE IF NEEDED (seconds into audio)
+  // 🔑 FINAL TIMESTAMPS (seconds into audio)
   const monthTimestamps = [
     0.0,   // Jan
     1.1,   // Feb
@@ -237,13 +213,6 @@
         });
         currentIndex = index;
       }
-
-      // DEBUG UI
-      document.getElementById("debugBox").innerHTML = `
-        time: ${t.toFixed(2)}s<br>
-        month: ${index + 1} (${monthNames[index]})<br>
-        duration: ${music.duration.toFixed(2)}s
-      `;
 
       requestAnimationFrame(loop);
     }
