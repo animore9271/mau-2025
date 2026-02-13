@@ -15,18 +15,14 @@
       overflow: hidden;
     }
 
-    /* Disable scroll until start */
     .container {
       height: 100vh;
-      overflow-y: hidden;
-    }
-
-    .container.active {
       overflow-y: scroll;
     }
 
     .container::-webkit-scrollbar { display: none; }
 
+    /* Use real viewport height (mobile-safe) */
     section {
       min-height: var(--vh);
       display: flex;
@@ -37,6 +33,7 @@
       text-align: center;
     }
 
+    /* Reduce dead space for photos */
     .photo {
       min-height: calc(var(--vh) * 0.8);
     }
@@ -87,8 +84,15 @@
       cursor: pointer;
     }
 
-    .yes { background: #e07a8c; color: white; }
-    .no { background: #f2d6dc; color: #4a2c2a; }
+    .yes {
+      background: #e07a8c;
+      color: white;
+    }
+
+    .no {
+      background: #f2d6dc;
+      color: #4a2c2a;
+    }
 
     .response {
       margin-top: 24px;
@@ -96,41 +100,26 @@
       min-height: 32px;
     }
 
-    /* Tap overlay */
-    .overlay {
+    .tap {
       position: fixed;
-      inset: 0;
-      background: linear-gradient(180deg, #fff5f7, #fdecef);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 9999;
-      cursor: pointer;
-    }
-
-    .overlay span {
-      margin-top: 14px;
-      font-size: 14px;
+      bottom: 16px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
       opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-<!-- Tap overlay -->
-<div class="overlay" id="startOverlay">
-  <div class="title">How did my 2025 look like?</div>
-  <span>tap to begin 🤍</span>
-</div>
-
 <audio id="bgm" src="music.mp3"></audio>
 
 <div class="container" id="scrollContainer">
 
-  <!-- Landing (kept for structure) -->
+  <!-- Landing -->
   <section class="step">
     <div class="title">How did my 2025 look like?</div>
+    <div class="subtitle">tap to begin 🤍</div>
   </section>
 
   <!-- Photos -->
@@ -162,10 +151,12 @@
 
 </div>
 
+<div class="tap">tap anywhere • sound on 🎧</div>
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-  /* Mobile-safe viewport height */
+  /* Fix mobile viewport height */
   function setViewportHeight() {
     document.documentElement.style.setProperty(
       "--vh",
@@ -176,52 +167,42 @@
   window.addEventListener("resize", setViewportHeight);
 
   const container = document.getElementById("scrollContainer");
-  const overlay = document.getElementById("startOverlay");
   const music = document.getElementById("bgm");
   const steps = Array.from(document.querySelectorAll(".step"));
 
-  const HOLD_TIME = 1000;
-  const START_DELAY = 700;
   let started = false;
+  const HOLD_TIME = 1000; // 1s per photo
 
-  function scrollToStep(i) {
-    container.scrollTo({ top: steps[i].offsetTop, behavior: "smooth" });
+  function scrollToStep(index) {
+    container.scrollTo({
+      top: steps[index].offsetTop,
+      behavior: "smooth"
+    });
   }
 
   async function playSequence() {
     for (let i = 0; i < steps.length; i++) {
       scrollToStep(i);
+
       if (steps[i].classList.contains("photo")) {
         await new Promise(r => setTimeout(r, HOLD_TIME));
       }
     }
   }
 
-  overlay.addEventListener("click", async () => {
+  document.body.addEventListener("click", async () => {
     if (started) return;
     started = true;
 
-    overlay.style.display = "none";
-    container.classList.add("active");
-
     await music.play();
-
-    setTimeout(() => {
-      playSequence();
-    }, START_DELAY);
-  });
+    playSequence();
+  }, { once: true });
 
   /* Valentine logic */
   const noResponses = [
     "😢 Wrong choice. Try again.",
     "🙃 Hmm… think carefully.",
     "😌 Are you sure about that?"
-    "😉 I feel like there’s a better answer.",
-    "😜 Nice prank. Try again?",
-    "💗 I’ll give you another chance.",
-    "😌 Take your time.",
-    "✨ Plot twist: that wasn’t it.",
-    "🫠 Let’s pretend that didn’t happen.",
   ];
   let noCount = 0;
 
@@ -233,9 +214,9 @@
 
   function sayYes() {
     document.getElementById("question").textContent =
-      "Well well well… look who said YES 😄";
+      "Yay! You just made me very happy 💕";
     document.getElementById("response").textContent =
-      "Best answer of the year 🥂";
+      "Here’s to us 🥂";
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
