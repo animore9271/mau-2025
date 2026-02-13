@@ -22,7 +22,7 @@
     .container {
       height: 100vh;
       overflow-y: scroll;
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
     }
 
     .container::-webkit-scrollbar {
@@ -60,7 +60,7 @@
     .photo img {
       max-width: 100%;
       max-height: 70vh;
-      background: #fff;
+      background: #ffffff;
       padding: 12px;
       border-radius: 14px;
       box-shadow:
@@ -130,8 +130,8 @@
 </head>
 <body>
 
-  <!-- Music -->
-  <audio id="bgm" src="music.mp3" loop></audio>
+  <!-- Music (NO LOOP) -->
+  <audio id="bgm" src="music.mp3"></audio>
 
   <div class="container" id="scrollContainer">
 
@@ -181,7 +181,6 @@
     const valentineSection = document.getElementById("valentineSection");
 
     let started = false;
-    let scrollInterval = null;
     let noCount = 0;
 
     const noResponses = [
@@ -190,24 +189,45 @@
       "😌 Are you sure about that?"
     ];
 
-    function autoScroll() {
-      container.scrollTop += 1.2;
-
-      const rect = valentineSection.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.5) {
-        clearInterval(scrollInterval);
-      }
-    }
-
-    document.body.addEventListener("click", () => {
+    function startExperience() {
       if (started) return;
       started = true;
 
       music.volume = 0.9;
       music.play();
 
-      scrollInterval = setInterval(autoScroll, 20);
-    }, { once: true });
+      music.addEventListener("loadedmetadata", () => {
+        const durationMs = music.duration * 1000;
+
+        const startScroll = container.scrollTop;
+        const endScroll =
+          valentineSection.offsetTop - window.innerHeight * 0.1;
+
+        const distance = endScroll - startScroll;
+        const startTime = performance.now();
+
+        function animateScroll(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / durationMs, 1);
+
+          // ease-in-out
+          const eased =
+            progress < 0.5
+              ? 2 * progress * progress
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+          container.scrollTop = startScroll + distance * eased;
+
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          }
+        }
+
+        requestAnimationFrame(animateScroll);
+      });
+    }
+
+    document.body.addEventListener("click", startExperience, { once: true });
 
     function sayNo() {
       const response = document.getElementById("response");
@@ -230,23 +250,19 @@
       const duration = 2500;
       const end = Date.now() + duration;
 
-      const defaults = {
-        startVelocity: 45,
-        spread: 360,
-        ticks: 90,
-        zIndex: 9999
-      };
-
       const interval = setInterval(() => {
         const timeLeft = end - Date.now();
         if (timeLeft <= 0) return clearInterval(interval);
 
-        const particleCount = 40 * (timeLeft / duration);
-
         confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: Math.random(), y: Math.random() * 0.5 }
+          particleCount: 40,
+          spread: 360,
+          startVelocity: 45,
+          ticks: 90,
+          origin: {
+            x: Math.random(),
+            y: Math.random() * 0.5
+          }
         });
       }, 250);
     }
