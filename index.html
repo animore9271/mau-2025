@@ -22,8 +22,9 @@
 
     .container::-webkit-scrollbar { display: none; }
 
+    /* Use real viewport height (mobile-safe) */
     section {
-      height: 100vh;
+      min-height: var(--vh);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -32,8 +33,21 @@
       text-align: center;
     }
 
-    .title { font-size: clamp(30px, 5vw, 48px); }
-    .subtitle { margin-top: 14px; font-size: 14px; opacity: 0.6; }
+    /* Reduce dead space for photos */
+    .photo {
+      min-height: calc(var(--vh) * 0.8);
+    }
+
+    .title {
+      font-size: clamp(30px, 5vw, 48px);
+      font-weight: 500;
+    }
+
+    .subtitle {
+      margin-top: 14px;
+      font-size: 14px;
+      opacity: 0.6;
+    }
 
     .photo img {
       max-width: 100%;
@@ -45,10 +59,23 @@
       object-fit: contain;
     }
 
-    .ending h1 { font-size: clamp(26px, 5vw, 42px); }
-    .ending h2 { margin-top: 16px; font-size: clamp(22px, 4vw, 36px); color: #e07a8c; }
+    .ending h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 500;
+    }
 
-    .buttons { margin-top: 28px; display: flex; gap: 20px; }
+    .ending h2 {
+      margin-top: 16px;
+      font-size: clamp(22px, 4vw, 36px);
+      color: #e07a8c;
+    }
+
+    .buttons {
+      margin-top: 28px;
+      display: flex;
+      gap: 20px;
+    }
+
     button {
       padding: 12px 26px;
       font-size: 16px;
@@ -57,10 +84,21 @@
       cursor: pointer;
     }
 
-    .yes { background: #e07a8c; color: white; }
-    .no { background: #f2d6dc; color: #4a2c2a; }
+    .yes {
+      background: #e07a8c;
+      color: white;
+    }
 
-    .response { margin-top: 24px; font-size: 18px; min-height: 32px; }
+    .no {
+      background: #f2d6dc;
+      color: #4a2c2a;
+    }
+
+    .response {
+      margin-top: 24px;
+      font-size: 18px;
+      min-height: 32px;
+    }
 
     .tap {
       position: fixed;
@@ -78,6 +116,7 @@
 
 <div class="container" id="scrollContainer">
 
+  <!-- Landing -->
   <section class="step">
     <div class="title">How did my 2025 look like?</div>
     <div class="subtitle">tap to begin 🤍</div>
@@ -97,6 +136,7 @@
   <section class="step photo"><img src="images/11.webp"></section>
   <section class="step photo"><img src="images/12.webp"></section>
 
+  <!-- Valentine -->
   <section class="step ending" id="valentineSection">
     <h1>Waiting for many more years like this</h1>
     <h2 id="question">Will you be my Valentine? ❤️</h2>
@@ -116,14 +156,22 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
+  /* Fix mobile viewport height */
+  function setViewportHeight() {
+    document.documentElement.style.setProperty(
+      "--vh",
+      `${window.innerHeight}px`
+    );
+  }
+  setViewportHeight();
+  window.addEventListener("resize", setViewportHeight);
+
   const container = document.getElementById("scrollContainer");
   const music = document.getElementById("bgm");
   const steps = Array.from(document.querySelectorAll(".step"));
 
   let started = false;
-  let currentStep = 0;
-
-  const HOLD_TIME = 1000; // 1 second per photo
+  const HOLD_TIME = 1000; // 1s per photo
 
   function scrollToStep(index) {
     container.scrollTo({
@@ -134,10 +182,8 @@
 
   async function playSequence() {
     for (let i = 0; i < steps.length; i++) {
-      currentStep = i;
       scrollToStep(i);
 
-      // Hold on photos, not landing
       if (steps[i].classList.contains("photo")) {
         await new Promise(r => setTimeout(r, HOLD_TIME));
       }
@@ -152,7 +198,7 @@
     playSequence();
   }, { once: true });
 
-  // Valentine logic
+  /* Valentine logic */
   const noResponses = [
     "😢 Wrong choice. Try again.",
     "🙃 Hmm… think carefully.",
