@@ -15,8 +15,13 @@
       overflow: hidden;
     }
 
+    /* Disable scroll until start */
     .container {
       height: 100vh;
+      overflow-y: hidden;
+    }
+
+    .container.active {
       overflow-y: scroll;
     }
 
@@ -82,15 +87,8 @@
       cursor: pointer;
     }
 
-    .yes {
-      background: #e07a8c;
-      color: white;
-    }
-
-    .no {
-      background: #f2d6dc;
-      color: #4a2c2a;
-    }
+    .yes { background: #e07a8c; color: white; }
+    .no { background: #f2d6dc; color: #4a2c2a; }
 
     .response {
       margin-top: 24px;
@@ -98,26 +96,41 @@
       min-height: 32px;
     }
 
-    .tap {
+    /* Tap overlay */
+    .overlay {
       position: fixed;
-      bottom: 16px;
-      width: 100%;
-      text-align: center;
-      font-size: 12px;
+      inset: 0;
+      background: linear-gradient(180deg, #fff5f7, #fdecef);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    .overlay span {
+      margin-top: 14px;
+      font-size: 14px;
       opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
+<!-- Tap overlay -->
+<div class="overlay" id="startOverlay">
+  <div class="title">How did my 2025 look like?</div>
+  <span>tap to begin 🤍</span>
+</div>
+
 <audio id="bgm" src="music.mp3"></audio>
 
 <div class="container" id="scrollContainer">
 
-  <!-- Landing -->
+  <!-- Landing (kept for structure) -->
   <section class="step">
     <div class="title">How did my 2025 look like?</div>
-    <div class="subtitle">tap to begin 🤍</div>
   </section>
 
   <!-- Photos -->
@@ -149,12 +162,10 @@
 
 </div>
 
-<div class="tap">tap anywhere • sound on 🎧</div>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-  /* Fix mobile viewport height */
+  /* Mobile-safe viewport height */
   function setViewportHeight() {
     document.documentElement.style.setProperty(
       "--vh",
@@ -165,43 +176,40 @@
   window.addEventListener("resize", setViewportHeight);
 
   const container = document.getElementById("scrollContainer");
+  const overlay = document.getElementById("startOverlay");
   const music = document.getElementById("bgm");
   const steps = Array.from(document.querySelectorAll(".step"));
 
+  const HOLD_TIME = 1000;
+  const START_DELAY = 700;
   let started = false;
-  const HOLD_TIME = 1000;      // time per photo
-  const START_DELAY = 700;    // delay before scroll starts (ms)
 
-  function scrollToStep(index) {
-    container.scrollTo({
-      top: steps[index].offsetTop,
-      behavior: "smooth"
-    });
+  function scrollToStep(i) {
+    container.scrollTo({ top: steps[i].offsetTop, behavior: "smooth" });
   }
 
   async function playSequence() {
     for (let i = 0; i < steps.length; i++) {
       scrollToStep(i);
-
       if (steps[i].classList.contains("photo")) {
         await new Promise(r => setTimeout(r, HOLD_TIME));
       }
     }
   }
 
-  document.body.addEventListener("click", async () => {
+  overlay.addEventListener("click", async () => {
     if (started) return;
     started = true;
 
-    // Start music immediately
+    overlay.style.display = "none";
+    container.classList.add("active");
+
     await music.play();
 
-    // Delay scroll so audio settles
     setTimeout(() => {
       playSequence();
     }, START_DELAY);
-
-  }, { once: true });
+  });
 
   /* Valentine logic */
   const noResponses = [
@@ -227,7 +235,7 @@
     document.getElementById("question").textContent =
       "Well well well… look who said YES 😄";
     document.getElementById("response").textContent =
-      "Great taste, by the way, as always 💅🥂💗";
+      "Best answer of the year 🥂";
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
