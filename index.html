@@ -22,7 +22,6 @@
 
     .container::-webkit-scrollbar { display: none; }
 
-    /* Use real viewport height (mobile-safe) */
     section {
       min-height: var(--vh);
       display: flex;
@@ -33,7 +32,6 @@
       text-align: center;
     }
 
-    /* Reduce dead space for photos */
     .photo {
       min-height: calc(var(--vh) * 0.8);
     }
@@ -171,7 +169,7 @@
   const steps = Array.from(document.querySelectorAll(".step"));
 
   let started = false;
-  const HOLD_TIME = 1000; // 1s per photo
+  const HOLD_TIME = 1000;
 
   function scrollToStep(index) {
     container.scrollTo({
@@ -183,7 +181,6 @@
   async function playSequence() {
     for (let i = 0; i < steps.length; i++) {
       scrollToStep(i);
-
       if (steps[i].classList.contains("photo")) {
         await new Promise(r => setTimeout(r, HOLD_TIME));
       }
@@ -195,14 +192,20 @@
     started = true;
 
     await music.play();
-    playSequence();
+
+    // 🔑 delay so audio actually starts
+    setTimeout(() => {
+      playSequence();
+    }, 700);
   }, { once: true });
 
   /* Valentine logic */
   const noResponses = [
-    "😢 Wrong choice. Try again.",
     "🙃 Hmm… think carefully.",
-    "😌 Are you sure about that?"
+    "🥺 Are you sure about that?",
+    "😉 I feel like there’s a better answer.",
+    "😜 Nice prank. Try again?",
+    "🤍 I’m right here."
   ];
   let noCount = 0;
 
@@ -214,9 +217,9 @@
 
   function sayYes() {
     document.getElementById("question").textContent =
-      "Yay! You just made me very happy 💕";
+      "Okay wow… you just unlocked my biggest smile 😄💗";
     document.getElementById("response").textContent =
-      "Here’s to us 🥂";
+      "Best answer of the year 🥂";
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
