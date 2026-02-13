@@ -22,7 +22,6 @@
 
     .container::-webkit-scrollbar { display: none; }
 
-    /* Use real viewport height (mobile-safe) */
     section {
       min-height: var(--vh);
       display: flex;
@@ -33,7 +32,6 @@
       text-align: center;
     }
 
-    /* Reduce dead space for photos */
     .photo {
       min-height: calc(var(--vh) * 0.8);
     }
@@ -171,7 +169,8 @@
   const steps = Array.from(document.querySelectorAll(".step"));
 
   let started = false;
-  const HOLD_TIME = 1000; // 1s per photo
+  const HOLD_TIME = 1000;      // time per photo
+  const START_DELAY = 700;    // delay before scroll starts (ms)
 
   function scrollToStep(index) {
     container.scrollTo({
@@ -194,8 +193,14 @@
     if (started) return;
     started = true;
 
+    // Start music immediately
     await music.play();
-    playSequence();
+
+    // Delay scroll so audio settles
+    setTimeout(() => {
+      playSequence();
+    }, START_DELAY);
+
   }, { once: true });
 
   /* Valentine logic */
@@ -203,6 +208,12 @@
     "😢 Wrong choice. Try again.",
     "🙃 Hmm… think carefully.",
     "😌 Are you sure about that?"
+    "😉 I feel like there’s a better answer.",
+    "😜 Nice prank. Try again?",
+    "💗 I’ll give you another chance.",
+    "😌 Take your time.",
+    "✨ Plot twist: that wasn’t it.",
+    "🫠 Let’s pretend that didn’t happen.",
   ];
   let noCount = 0;
 
@@ -214,9 +225,9 @@
 
   function sayYes() {
     document.getElementById("question").textContent =
-      "Yay! You just made me very happy 💕";
+      "Well well well… look who said YES 😄";
     document.getElementById("response").textContent =
-      "Here’s to us 🥂";
+      "Great taste, by the way, as always 💅🥂💗";
     document.querySelector(".buttons").style.display = "none";
 
     confetti({
